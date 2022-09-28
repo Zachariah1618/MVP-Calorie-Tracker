@@ -86,10 +86,42 @@ body {
   font-weight: bold;
   text-align: center;
 }
+.flex-item-top-search {
+  background: greenyellow;
+  padding: 5px;
+  width: 200px;
+  height: 25px;
+  margin-top: 10px;
+  line-height: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+.flex-item-top-search-blank {
+  padding: 5px;
+  width: 200px;
+  height: 25px;
+  margin-top: 10px;
+  line-height: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+.flex-item-search {
+  padding: 5px;
+  width: 200px;
+  height: 25px;
+  margin-top: 10px;
+  line-height: 15px;
+  font-weight: bold;
+  text-align: center;
+}
 
 #formBtn {
   margin-left: 40px;
   margin-top: 10px;
+}
+
+#searchTitle {
+  font-size: small;
 }
 
 

@@ -2,6 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import Form from './components/Form.jsx';
 import Search from './components/Search.jsx';
+import API_KEY from '../config/config.js';
 const root = createRoot(document.getElementById("root"));
 
 class App extends React.Component {
