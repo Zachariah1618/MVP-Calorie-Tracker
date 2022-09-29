@@ -4,12 +4,10 @@ class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      foodName: '',
-      mealType: '',
-      calories: '',
-      fat: '',
-      carbs: '',
-      protein: ''
+      name: '',
+      quantity: '',
+      unit: '',
+      cal: ''
     };
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,12 +22,10 @@ class Form extends React.Component {
     e.preventDefault();
     this.props.addToDB(this.state);
     this.setState({
-      foodName: '',
-      mealType: '',
-      calories: '',
-      fat: '',
-      carbs: '',
-      protein: ''
+      name: '',
+      quantity: '',
+      unit: '',
+      cal: ''
     });
   }
 
@@ -45,22 +41,13 @@ class Form extends React.Component {
         <button onClick={this.props.onClose}>X</button>
         <form onSubmit={this.handleSubmit.bind(this)}>
         <label>Food Name:</label>
-        <input type='text' id='foodName' value={this.state.foodName} onInput={this.handleInput.bind(this)}/> <br></br>
-        <label>Meal Type:</label>
-        <select id='mealType' onInput={this.handleInput.bind(this)}>
-          <option value='breakfast'>Breakfast</option>
-          <option value='lunch'>Lunch</option>
-          <option value='dinner'>Dinner</option>
-          <option value='snack'>Snack</option>
-        </select> <br></br>
+        <input type='text' id='name' value={this.state.name} onInput={this.handleInput.bind(this)}/> <br></br>
+        <label>Quantity:</label>
+        <input type='number' id='quantity' value={this.state.quantity} onInput={this.handleInput.bind(this)}/> <br></br>
+        <label>Units:</label>
+        <input type='text' id='unit' value={this.state.unit} onInput={this.handleInput.bind(this)}/> <br></br>
         <label>Calories:</label>
-        <input type='number' id='calories' value={this.state.calories} onInput={this.handleInput.bind(this)}/> <br></br>
-        <label>Fat:</label>
-        <input type='number' id='fat' value={this.state.fat} onInput={this.handleInput.bind(this)}/> <br></br>
-        <label>Carbs:</label>
-        <input type='number' id='carbs' value={this.state.carbs} onInput={this.handleInput.bind(this)}/> <br></br>
-        <label>Protein:</label>
-        <input type='number' id='protein' value={this.state.protein} onInput={this.handleInput.bind(this)}/> <br></br>
+        <input type='number' id='cal' value={this.state.cal} onInput={this.handleInput.bind(this)}/> <br></br>
         <input type='submit' onSubmit={this.props.onClose}/> <br></br>
         </form>
       </div>

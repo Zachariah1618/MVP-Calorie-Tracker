@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import Form from './components/Form.jsx';
 import Search from './components/Search.jsx';
 import API_KEY from '../config/config.js';
+const axios = require('axios');
 const root = createRoot(document.getElementById("root"));
 
 class App extends React.Component {
@@ -12,36 +13,68 @@ class App extends React.Component {
       foodName: null,
       mealType: null,
       calories: null,
-      fat: null,
-      carbs: null,
-      protein: null,
       foodArr: [],
-      show: false
+      show: false,
+      calSum: 0
     };
     this.addToDB = this.addToDB.bind(this);
     this.setShow = this.setShow.bind(this);
+    this.updateFunc = this.updateFunc.bind(this);
+    this.getTotals = this.getTotals.bind(this);
   }
 
   addToDB (foodData) {
     console.log(foodData);
-    this.setState({foodArr: [...this.state.foodArr, foodData]});
-    console.log(this.state.foodArr);
+    axios.post('/caltrack', {
+      params: {
+        name: foodData.name,
+        quantity: foodData.quantity,
+        unit: foodData.unit,
+        cal: foodData.cal
+      }
+    })
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
   }
+
 
   setShow(bool) {
     this.setState({show: bool});
   }
 
   componentDidMount() {
-    var tempObj = {
-      foodName: 'Coffee',
-      mealType: 'breakfast',
-      calories: 100,
-      fat: 2.85,
-      carbs: 18.36,
-      protein: 0.75
-    };
-    this.setState({foodArr: [...this.state.foodArr, tempObj]});
+    this.updateFunc();
+  }
+
+  updateFunc() {
+    axios.get('/caltrack' , {
+      params: {
+        count: 5,
+        page: 0
+      }
+    })
+    .then((res) => {this.setState({foodArr: res.data})})
+    .catch((err) => console.log(err));
+    this.getTotals();
+  }
+
+  componentDidUpdate() {
+    setTimeout(this.updateFunc, 1000);
+    setTimeout(this.getTotals, 1000);
+  }
+
+  getTotals() {
+    var arr = this.state.foodArr;
+    var calcArr = [];
+    var sum = 0;
+    for (var i = 0; i < arr.length; i++) {
+      calcArr.push(arr[i].cal);
+    }
+    for (var j = 0; j < calcArr.length; j++) {
+      const temp = Number.parseInt(calcArr[j]);
+      sum += temp;
+    }
+    this.setState({calSum: sum});
   }
 
   render() {
@@ -55,30 +88,27 @@ class App extends React.Component {
         <h2 id='searchTitle'>Search for Foods!</h2>
         <Search />
         <ul id='foodList' className='flex-container'>
-            <li className="flex-item-top">Meal Type</li>
             <li className="flex-item-top">Food Eaten</li>
+            <li className="flex-item-top">Quantity</li>
+            <li className="flex-item-top">Unit</li>
             <li className="flex-item-top">Calories</li>
-            <li className="flex-item-top">Fat</li>
-            <li className="flex-item-top">Carbs</li>
-            <li className="flex-item-top">Protein</li>
+            <li className="flex-item-top">Date</li>
           </ul>
         {this.state.foodArr.map((foodItem, index) => (
           <ul id='foodList' className='flex-container'>
-            <li className="flex-item">{foodItem.mealType}</li>
-            <li className="flex-item">{foodItem.foodName}</li>
-            <li className="flex-item">{foodItem.calories} (kcal)</li>
-            <li className="flex-item">{foodItem.fat} (g)</li>
-            <li className="flex-item">{foodItem.carbs} (g)</li>
-            <li className="flex-item">{foodItem.protein} (g)</li>
+            <li className="flex-item">{foodItem.name}</li>
+            <li className="flex-item">{foodItem.quantity}</li>
+            <li className="flex-item">{foodItem.unit}</li>
+            <li className="flex-item">{foodItem.cal} (kcal)</li>
+            <li className="flex-item">{foodItem.date}</li>
           </ul>
         ))}
           <ul id='foodList' className='flex-container-bottom'>
             <li className="flex-item"></li>
+            <li className="flex-item"></li>
             <li className="flex-item">Totals:</li>
-            <li className="flex-item">100 (kcal)</li>
-            <li className="flex-item">2.85 (g)</li>
-            <li className="flex-item">18.36 (g)</li>
-            <li className="flex-item">0.75 (g)</li>
+            <li className="flex-item">{this.state.calSum} (kcal)</li>
+            <li className="flex-item"></li>
           </ul>
 
       </div>

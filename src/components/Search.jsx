@@ -401,7 +401,6 @@ class Search extends React.Component {
   handleSelect(e) {
     e.preventDefault();
     this.setState({btnIndex: e.target.id});
-    console.log(e.target.id);
     var index = e.target.id;
     this.setState({currentFood: this.state.itemArr[index]});
     var selectedUnit = '';
@@ -411,12 +410,12 @@ class Search extends React.Component {
     } else {
       selectedUnit = this.state.itemArr[index].units[0];
     }
+    this.setState({currentUnit: selectedUnit});
     for (var i = 0; i < unitArr.length; i++) {
       if(unitArr[i].description === selectedUnit) {
         selectedUnit = unitArr[i].id;
       }
     }
-    this.setState({currentUnit: selectedUnit});
     var body =
     {
       "items": [
@@ -431,20 +430,19 @@ class Search extends React.Component {
     {
       headers: {'Ocp-Apim-Subscription-Key': `${API_KEY.API_KEY}`}
     })
-    .then((res) => {this.handlePost(res.results)})
+    .then((res) => {this.handlePost(res.data.results)})
     .catch((err) => console.log(err));
   }
 
   handlePost(arr) {
     this.setState({nutrArr: arr});
     var tempObj = this.state.currentFood;
-
     axios.post('/caltrack', {
       params: {
         name: tempObj.description,
         quantity: tempObj.quantity,
         unit: this.state.currentUnit,
-        cal: arr[0].value
+        cal: Math.floor(arr[0].value)
       }
     })
     .then((res) => console.log(res))
@@ -455,9 +453,7 @@ class Search extends React.Component {
     e.preventDefault();
     this.setState({currentUnit: e.target.value});
   }
-componentDidMount() {
 
-}
 
   render()
   {

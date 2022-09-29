@@ -3,9 +3,9 @@ var router = require('express').Router();
 
 
 //GET Request
-router.get('/caltrack');
+router.get('/caltrack', controller.cal.get);
 
-router.post('/caltrack');
+router.post('/caltrack', controller.cal.add);
 
 
 
